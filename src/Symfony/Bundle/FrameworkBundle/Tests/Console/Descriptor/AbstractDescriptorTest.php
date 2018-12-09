@@ -12,6 +12,7 @@
 namespace Symfony\Bundle\FrameworkBundle\Tests\Console\Descriptor;
 
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Console\Descriptor\Descriptor;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -190,6 +191,60 @@ abstract class AbstractDescriptorTest extends TestCase
         $this->assertDescription($expectedDescription, $callable);
     }
 
+    public function testGetClassDescription()
+    {
+        $classDescription = Descriptor::getClassDescription(
+            'Symfony\Bundle\FrameworkBundle\Tests\Console\Descriptor\DescriptionTest'
+        );
+
+        $this->assertEquals('Interface DescriptionTest', $classDescription);
+    }
+
+    public function testGetClassDescriptionWithMultilineDescription()
+    {
+        $classDescription = Descriptor::getClassDescription(
+            'Symfony\Bundle\FrameworkBundle\Tests\Console\Descriptor\MultilineDescriptionTest'
+        );
+
+        $this->assertEquals('Interface DescriptionTest', $classDescription);
+    }
+
+    public function testGetClassDescriptionWithNoDescription()
+    {
+        $classDescription = Descriptor::getClassDescription(
+            'Symfony\Bundle\FrameworkBundle\Tests\Console\Descriptor\NoDescription'
+        );
+
+        $this->assertEmpty($classDescription);
+    }
+
+    public function testGetClassDescriptionEmptyDocblock()
+    {
+        $classDescription = Descriptor::getClassDescription(
+            'Symfony\Bundle\FrameworkBundle\Tests\Console\Descriptor\EmptyDocblockTest'
+        );
+
+        $this->assertEmpty($classDescription);
+    }
+
+    public function testGetClassDescriptionOnlyAts()
+    {
+        $classDescription = Descriptor::getClassDescription(
+            'Symfony\Bundle\FrameworkBundle\Tests\Console\Descriptor\OnlyAtsInDescriptionTest'
+        );
+
+        $this->assertEmpty($classDescription);
+    }
+
+    public function testGetClassDescriptionWithDescriptionAfterAt()
+    {
+        $classDescription = Descriptor::getClassDescription(
+            'Symfony\Bundle\FrameworkBundle\Tests\Console\Descriptor\DescriptionAfterAtTest'
+        );
+
+        $this->assertEmpty($classDescription);
+    }
+
     public function getDescribeCallableTestData()
     {
         return $this->getDescriptionTestData(ObjectsProvider::getCallables());
@@ -271,3 +326,37 @@ abstract class AbstractDescriptorTest extends TestCase
         return $data;
     }
 }
+
+/**
+ * Interface DescriptionTest
+ *
+ * @package Symfony\Bundle\FrameworkBundle\Tests\Console\Descriptor
+ */
+interface DescriptionTest {}
+
+/**
+ * Interface DescriptionTest
+ *
+ * This is more information
+ *
+ * @package Symfony\Bundle\FrameworkBundle\Tests\Console\Descriptor
+ */
+interface MultilineDescriptionTest {}
+
+interface NoDescriptionTest {}
+
+/**
+ */
+interface EmptyDocblockTest {}
+
+/**
+ * @package Symfony\Bundle\FrameworkBundle\Tests\Console\Descriptor
+ */
+interface OnlyAtsInDescriptionTest {}
+
+/**
+ * @package Symfony\Bundle\FrameworkBundle\Tests\Console\Descriptor
+ *
+ * Interface DescriptionAfterAt
+ */
+interface DescriptionAfterAtTest {}
