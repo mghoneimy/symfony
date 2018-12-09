@@ -102,7 +102,7 @@
         "predis/predis": "~1.1",
         "egulias/email-validator": "~1.2,>=1.2.8|~2.0",
         "symfony/phpunit-bridge": "~3.4|~4.0",
-        "symfony/security-acl": "~2.8|~3.0",
+        "symfony/security-acl": "~2.8|~3.0"
     },
     "conflict": {
         "phpunit/phpunit": "<5.4.3"
